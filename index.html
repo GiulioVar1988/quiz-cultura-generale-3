@@ -203,8 +203,16 @@
         </button>
 
         <div class="bank-info">
-            240+ domande disponibili • 10 domande per partita
+            Caricamento domande...
         </div>
+        
+        <!-- Aggiunto contatore domande fatte -->
+        <div id="stats-info" style="text-align: center; color: #007bff; font-weight: bold; font-size: 14px; margin-top: 5px;">
+        </div>
+        
+        <button class="btn" onclick="resetQuizMemory()" style="background-color: #6c757d; margin-top: 10px; font-size: 14px;">
+            Azzera memoria (Ricomincia da capo)
+        </button>
     </div>
 
 
@@ -252,7 +260,11 @@
         </div>
 
         <button class="btn" onclick="startQuiz()">
-            Ricomincia Nuovo Quiz
+            Prossime 10 Domande
+        </button>
+        
+        <button class="btn" onclick="goToStart()" style="background-color: #6c757d; margin-top: 10px;">
+            Torna alla Home
         </button>
 
     </div>
@@ -275,472 +287,102 @@ const TOTAL_QUESTIONS = 10;
    ============================================================ */
 
 const difficultQuestions = [
-
-    {
-        q: "In quale anno fu emanata la Magna Carta, uno dei documenti fondamentali nella storia del costituzionalismo inglese?",
-        options: ["1066", "1215", "1291", "1348"],
-        answer: 1
-    },
-
-    {
-        q: "Qual è il lago più profondo del mondo?",
-        options: ["Lago Tanganica", "Lago Bajkal", "Lago Superiore", "Lago Titicaca"],
-        answer: 1
-    },
-
-    {
-        q: "Chi diresse il film 'Quarto potere' del 1941?",
-        options: ["Alfred Hitchcock", "Billy Wilder", "Orson Welles", "John Ford"],
-        answer: 2
-    },
-
-    {
-        q: "Chi è l'autore del romanzo 'Il maestro e Margherita'?",
-        options: ["Fëdor Dostoevskij", "Vladimir Nabokov", "Michail Bulgakov", "Boris Pasternak"],
-        answer: 2
-    },
-
-    {
-        q: "Chi dipinse 'Las Meninas'?",
-        options: ["Francisco Goya", "Diego Velázquez", "El Greco", "Murillo"],
-        answer: 1
-    },
-
-    {
-        q: "A quale scienziato è attribuita la teoria della deriva dei continenti?",
-        options: ["Charles Darwin", "James Hutton", "Alfred Wegener", "Charles Lyell"],
-        answer: 2
-    },
-
-    {
-        q: "Chi compose 'La sagra della primavera'?",
-        options: ["Maurice Ravel", "Igor Stravinskij", "Sergej Prokof'ev", "Modest Musorgskij"],
-        answer: 1
-    },
-
-    {
-        q: "In quale anno fu firmato il Trattato del Nord Atlantico che diede origine alla NATO?",
-        options: ["1945", "1949", "1953", "1955"],
-        answer: 1
-    },
-
-    {
-        q: "Chi fu il primo campione del mondo della storia della Formula 1, nel 1950?",
-        options: ["Juan Manuel Fangio", "Alberto Ascari", "Nino Farina", "Stirling Moss"],
-        answer: 2
-    },
-
-    {
-        q: "Chi inventò il World Wide Web mentre lavorava al CERN?",
-        options: ["Vint Cerf", "Robert Metcalfe", "Douglas Engelbart", "Tim Berners-Lee"],
-        answer: 3
-    },
-
-    {
-        q: "La crisi di Suez del 1956 fu provocata principalmente dalla nazionalizzazione di quale infrastruttura?",
-        options: ["Canale di Panama", "Canale di Suez", "Diga di Assuan", "Stretto di Hormuz"],
-        answer: 1
-    },
-
-    {
-        q: "Quali territori sono separati dallo Stretto di Bering?",
-        options: ["Alaska e Siberia", "Canada e Groenlandia", "Giappone e Corea", "Islanda e Norvegia"],
-        answer: 0
-    },
-
-    {
-        q: "Chi diresse 'Ladri di biciclette'?",
-        options: ["Vittorio De Sica", "Roberto Rossellini", "Luchino Visconti", "Cesare Zavattini"],
-        answer: 0
-    },
-
-    {
-        q: "Chi scrisse 'Cent'anni di solitudine'?",
-        options: ["Jorge Luis Borges", "Mario Vargas Llosa", "Gabriel García Márquez", "Pablo Neruda"],
-        answer: 2
-    },
-
-    {
-        q: "Chi dipinse 'Impression, soleil levant'?",
-        options: ["Édouard Manet", "Claude Monet", "Pierre-Auguste Renoir", "Camille Pissarro"],
-        answer: 1
-    },
-
-    {
-        q: "Chi identificò per primo i principali gruppi sanguigni del sistema AB0?",
-        options: ["Karl Landsteiner", "Alexander Fleming", "Robert Koch", "Paul Ehrlich"],
-        answer: 0
-    },
-
-    {
-        q: "Quale compositore scrisse 'Il flauto magico'?",
-        options: ["Giuseppe Verdi", "Richard Wagner", "Wolfgang Amadeus Mozart", "Gioachino Rossini"],
-        answer: 2
-    },
-
-    {
-        q: "Quale trattato del 1992 istituì formalmente l'Unione Europea?",
-        options: ["Trattato di Roma", "Trattato di Maastricht", "Trattato di Parigi", "Trattato di Nizza"],
-        answer: 1
-    },
-
-    {
-        q: "In quale anno si disputò la prima edizione del Tour de France?",
-        options: ["1896", "1903", "1912", "1920"],
-        answer: 1
-    },
-
-    {
-        q: "Chi rese celebre il termine 'cyberspace' nel romanzo 'Neuromante'?",
-        options: ["Isaac Asimov", "Arthur C. Clarke", "Philip K. Dick", "William Gibson"],
-        answer: 3
-    },
-
-    {
-        q: "In quale anno fu firmato il Trattato di Versailles?",
-        options: ["1917", "1919", "1921", "1923"],
-        answer: 1
-    },
-
-    {
-        q: "In quale mare sfocia il Danubio?",
-        options: ["Mar Baltico", "Mar Mediterraneo", "Mar Nero", "Mar del Nord"],
-        answer: 2
-    },
-
-    {
-        q: "Quale attore interpreta Rick Blaine nel film 'Casablanca'?",
-        options: ["Cary Grant", "Humphrey Bogart", "James Stewart", "Gregory Peck"],
-        answer: 1
-    },
-
-    {
-        q: "Chi scrisse 'Ulisse'?",
-        options: ["James Joyce", "Samuel Beckett", "T. S. Eliot", "Virginia Woolf"],
-        answer: 0
-    },
-
-    {
-        q: "Chi dipinse il 'Ritratto dei coniugi Arnolfini'?",
-        options: ["Hans Holbein il Giovane", "Jan van Eyck", "Albrecht Dürer", "Rogier van der Weyden"],
-        answer: 1
-    },
-
-    {
-        q: "A chi viene attribuita la prima vaccinazione efficace contro il vaiolo?",
-        options: ["Edward Jenner", "Louis Pasteur", "Robert Koch", "Joseph Lister"],
-        answer: 0
-    },
-
-    {
-        q: "Quale musicista pubblicò l'album jazz 'Kind of Blue'?",
-        options: ["John Coltrane", "Miles Davis", "Thelonious Monk", "Duke Ellington"],
-        answer: 1
-    },
-
-    {
-        q: "Quale scandalo politico portò alle dimissioni del presidente Richard Nixon?",
-        options: ["Iran-Contra", "Watergate", "Pentagon Papers", "Teapot Dome"],
-        answer: 1
-    },
-
-    {
-        q: "In quale anno si disputò il primo torneo di Wimbledon?",
-        options: ["1868", "1877", "1888", "1896"],
-        answer: 1
-    },
-
-    {
-        q: "Chi è il principale autore del kernel Linux?",
-        options: ["Dennis Ritchie", "Ken Thompson", "Linus Torvalds", "Richard Stallman"],
-        answer: 2
-    },
-
-    {
-        q: "Quale evento del 1868 segnò l'inizio della trasformazione politica del Giappone?",
-        options: ["Rivoluzione Taiping", "Restaurazione Meiji", "Rivoluzione culturale", "Restaurazione Tokugawa"],
-        answer: 1
-    },
-
-    {
-        q: "Quale Stato possiede coste sia sul Mar Caspio sia sul Golfo Persico?",
-        options: ["Iraq", "Iran", "Pakistan", "Azerbaigian"],
-        answer: 1
-    },
-
-    {
-        q: "Chi diresse il film 'La dolce vita'?",
-        options: ["Michelangelo Antonioni", "Federico Fellini", "Pier Paolo Pasolini", "Vittorio De Sica"],
-        answer: 1
-    },
-
-    {
-        q: "Chi scrisse 'Il processo'?",
-        options: ["Franz Kafka", "Thomas Mann", "Hermann Hesse", "Stefan Zweig"],
-        answer: 0
-    },
-
-    {
-        q: "Chi dipinse 'Il bacio' del 1907-1908?",
-        options: ["Gustav Klimt", "Egon Schiele", "Edvard Munch", "Amedeo Modigliani"],
-        answer: 0
-    },
-
-    {
-        q: "A quale scienziato è attribuita la scoperta della radioattività naturale nel 1896?",
-        options: ["Henri Becquerel", "Ernest Rutherford", "J. J. Thomson", "Max Planck"],
-        answer: 0
-    },
-
-    {
-        q: "Quale gruppo pubblicò 'Bohemian Rhapsody' nel 1975?",
-        options: ["The Who", "Pink Floyd", "Queen", "Led Zeppelin"],
-        answer: 2
-    },
-
-    {
-        q: "Che cosa stabilisce in sostanza l'articolo 5 del Trattato NATO?",
-        options: [
-            "La libera circolazione dei cittadini",
-            "La difesa collettiva in caso di attacco armato",
-            "L'adozione di una moneta unica",
-            "Il diritto di veto all'ONU"
-        ],
-        answer: 1
-    },
-
-    {
-        q: "Qual è la distanza ufficiale della maratona moderna?",
-        options: ["40,000 km", "41,195 km", "42,195 km", "43,000 km"],
-        answer: 2
-    },
-
-    {
-        q: "Chi fu il principale fondatore di Wikipedia insieme a Jimmy Wales?",
-        options: ["Larry Sanger", "Steve Wozniak", "Steve Jobs", "Sergey Brin"],
-        answer: 0
-    },
-
-    {
-        q: "Quale battaglia del 1066 segnò la conquista normanna dell'Inghilterra?",
-        options: ["Agincourt", "Hastings", "Crécy", "Poitiers"],
-        answer: 1
-    },
-
-    {
-        q: "Quale Paese africano non ha sbocco sul mare?",
-        options: ["Namibia", "Mozambico", "Botswana", "Sudafrica"],
-        answer: 2
-    },
-
-    {
-        q: "Quale riconoscimento vinse 'Pulp Fiction' al Festival di Cannes nel 1994?",
-        options: ["Leone d'Oro", "Palma d'Oro", "Orso d'Oro", "Gran Premio della Giuria"],
-        answer: 1
-    },
-
-    {
-        q: "Chi scrisse 'Se questo è un uomo'?",
-        options: ["Italo Calvino", "Primo Levi", "Elio Vittorini", "Cesare Pavese"],
-        answer: 1
-    },
-
-    {
-        q: "Quale artista presentò nel 1917 l'opera 'Fountain'?",
-        options: ["Pablo Picasso", "Marcel Duchamp", "Man Ray", "Kazimir Malevič"],
-        answer: 1
-    },
-
-    {
-        q: "Chi dimostrò sperimentalmente l'esistenza dell'elettrone?",
-        options: ["Ernest Rutherford", "J. J. Thomson", "James Clerk Maxwell", "Michael Faraday"],
-        answer: 1
-    },
-
-    {
-        q: "Chi compose il 'Boléro'?",
-        options: ["Claude Debussy", "Maurice Ravel", "Camille Saint-Saëns", "Gabriel Fauré"],
-        answer: 1
-    },
-
-    {
-        q: "In quale anno si tennero le prime elezioni dirette del Parlamento europeo?",
-        options: ["1973", "1979", "1984", "1989"],
-        answer: 1
-    },
-
-    {
-        q: "Chi vinse i 100 metri maschili alle Olimpiadi di Città del Messico del 1968 in 9,95 secondi?",
-        options: ["Jesse Owens", "Carl Lewis", "Jim Hines", "Tommie Smith"],
-        answer: 2
-    },
-
-    {
-        q: "Chi coniò il termine 'intelligenza artificiale' nel contesto della conferenza di Dartmouth del 1956?",
-        options: ["Alan Turing", "John McCarthy", "Claude Shannon", "Marvin Minsky"],
-        answer: 1
-    },
-
-    {
-        q: "Quali imperatori romani promulgarono nel 313 l'Editto di Milano?",
-        options: ["Costantino e Licinio", "Augusto e Tiberio", "Nerone e Galba", "Diocleziano e Massimiano"],
-        answer: 0
-    },
-
-    {
-        q: "Quali sono tradizionalmente considerati i due estremi principali della Ferrovia Transiberiana?",
-        options: ["Mosca e Vladivostok", "San Pietroburgo e Murmansk", "Mosca e Novosibirsk", "Kiev e Vladivostok"],
-        answer: 0
-    },
-
-    {
-        q: "Chi diresse il film horror 'Psycho'?",
-        options: ["Stanley Kubrick", "Alfred Hitchcock", "Roman Polanski", "Brian De Palma"],
-        answer: 1
-    },
-
-    {
-        q: "Chi scrisse 'Alla ricerca del tempo perduto'?",
-        options: ["Marcel Proust", "André Gide", "Émile Zola", "Gustave Flaubert"],
-        answer: 0
-    },
-
-    {
-        q: "Chi dipinse 'La persistenza della memoria'?",
-        options: ["Joan Miró", "Salvador Dalí", "René Magritte", "Pablo Picasso"],
-        answer: 1
-    },
-
-    {
-        q: "Quali due naturalisti svilupparono indipendentemente idee fondamentali sulla selezione naturale?",
-        options: ["Darwin e Wallace", "Darwin e Mendel", "Lamarck e Wallace", "Mendel e Lyell"],
-        answer: 0
-    },
-
-    {
-        q: "Quale compositore è autore della celebre 'Sonata al chiaro di luna'?",
-        options: ["Franz Schubert", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Frédéric Chopin"],
-        answer: 2
-    },
-
-    {
-        q: "In quale località del Lussemburgo fu firmato nel 1985 l'accordo da cui prende il nome l'area Schengen?",
-        options: ["Esch-sur-Alzette", "Schengen", "Luxembourg City", "Vianden"],
-        answer: 1
-    },
-
-    {
-        q: "Quale nazionale vinse la prima Coppa del Mondo di rugby nel 1987?",
-        options: ["Australia", "Nuova Zelanda", "Sudafrica", "Inghilterra"],
-        answer: 1
-    },
-
-    {
-        q: "Quale azienda acquisì YouTube nel 2006?",
-        options: ["Microsoft", "Apple", "Google", "Yahoo!"],
-        answer: 2
-    },
-
-    {
-        q: "Quale evento del 1453 è tradizionalmente considerato la fine dell'Impero Romano d'Oriente?",
-        options: ["La caduta di Antiochia", "La caduta di Costantinopoli", "La conquista di Gerusalemme", "La battaglia di Lepanto"],
-        answer: 1
-    },
-
-    {
-        q: "Quale Paese africano possiede coste sia sull'Oceano Atlantico sia sull'Oceano Indiano?",
-        options: ["Kenya", "Sudafrica", "Angola", "Tanzania"],
-        answer: 1
-    },
-
-    {
-        q: "Chi diresse il film '8½'?",
-        options: ["Federico Fellini", "Michelangelo Antonioni", "Luchino Visconti", "Bernardo Bertolucci"],
-        answer: 0
-    },
-
-    {
-        q: "Chi scrisse 'Il Gattopardo'?",
-        options: ["Leonardo Sciascia", "Giuseppe Tomasi di Lampedusa", "Alberto Moravia", "Gabriele D'Annunzio"],
-        answer: 1
-    },
-
-    {
-        q: "Chi dipinse 'La nascita di Venere'?",
-        options: ["Sandro Botticelli", "Tiziano", "Raffaello", "Piero della Francesca"],
-        answer: 0
-    },
-
-    {
-        q: "In quale strato dell'atmosfera si trova la maggior parte dell'ozono atmosferico?",
-        options: ["Troposfera", "Stratosfera", "Mesosfera", "Termosfera"],
-        answer: 1
-    },
-
-    {
-        q: "Chi rese celebre l'espressione 'Cortina di ferro' nel discorso di Fulton del 1946?",
-        options: ["Franklin D. Roosevelt", "Harry Truman", "Winston Churchill", "George Marshall"],
-        answer: 2
-    },
-
-    {
-        q: "Quale atleta vinse i 100 metri alle Olimpiadi di Città del Messico del 1968?",
-        options: ["Tommie Smith", "Jim Hines", "Jesse Owens", "Bob Hayes"],
-        answer: 1
-    },
-
-    {
-        q: "Quale compositore russo scrisse il balletto 'Il lago dei cigni'?",
-        options: ["Nikolaj Rimskij-Korsakov", "Pëtr Il'ič Čajkovskij", "Sergej Rachmaninov", "Igor Stravinskij"],
-        answer: 1
-    },
-
-    {
-        q: "Quale società sviluppò originariamente Android prima dell'acquisizione da parte di Google?",
-        options: ["Android Inc.", "Palm Computing", "BlackBerry", "Nokia"],
-        answer: 0
-    }
-
+    { q: "In quale anno fu emanata la Magna Carta, uno dei documenti fondamentali nella storia del costituzionalismo inglese?", options: ["1066", "1215", "1291", "1348"], answer: 1 },
+    { q: "Qual è il lago più profondo del mondo?", options: ["Lago Tanganica", "Lago Bajkal", "Lago Superiore", "Lago Titicaca"], answer: 1 },
+    { q: "Chi diresse il film 'Quarto potere' del 1941?", options: ["Alfred Hitchcock", "Billy Wilder", "Orson Welles", "John Ford"], answer: 2 },
+    { q: "Chi è l'autore del romanzo 'Il maestro e Margherita'?", options: ["Fëdor Dostoevskij", "Vladimir Nabokov", "Michail Bulgakov", "Boris Pasternak"], answer: 2 },
+    { q: "Chi dipinse 'Las Meninas'?", options: ["Francisco Goya", "Diego Velázquez", "El Greco", "Murillo"], answer: 1 },
+    { q: "A quale scienziato è attribuita la teoria della deriva dei continenti?", options: ["Charles Darwin", "James Hutton", "Alfred Wegener", "Charles Lyell"], answer: 2 },
+    { q: "Chi compose 'La sagra della primavera'?", options: ["Maurice Ravel", "Igor Stravinskij", "Sergej Prokof'ev", "Modest Musorgskij"], answer: 1 },
+    { q: "In quale anno fu firmato il Trattato del Nord Atlantico che diede origine alla NATO?", options: ["1945", "1949", "1953", "1955"], answer: 1 },
+    { q: "Chi fu il primo campione del mondo della storia della Formula 1, nel 1950?", options: ["Juan Manuel Fangio", "Alberto Ascari", "Nino Farina", "Stirling Moss"], answer: 2 },
+    { q: "Chi inventò il World Wide Web mentre lavorava al CERN?", options: ["Vint Cerf", "Robert Metcalfe", "Douglas Engelbart", "Tim Berners-Lee"], answer: 3 },
+    { q: "La crisi di Suez del 1956 fu provocata principalmente dalla nazionalizzazione di quale infrastruttura?", options: ["Canale di Panama", "Canale di Suez", "Diga di Assuan", "Stretto di Hormuz"], answer: 1 },
+    { q: "Quali territori sono separati dallo Stretto di Bering?", options: ["Alaska e Siberia", "Canada e Groenlandia", "Giappone e Corea", "Islanda e Norvegia"], answer: 0 },
+    { q: "Chi diresse 'Ladri di biciclette'?", options: ["Vittorio De Sica", "Roberto Rossellini", "Luchino Visconti", "Cesare Zavattini"], answer: 0 },
+    { q: "Chi scrisse 'Cent'anni di solitudine'?", options: ["Jorge Luis Borges", "Mario Vargas Llosa", "Gabriel García Márquez", "Pablo Neruda"], answer: 2 },
+    { q: "Chi dipinse 'Impression, soleil levant'?", options: ["Édouard Manet", "Claude Monet", "Pierre-Auguste Renoir", "Camille Pissarro"], answer: 1 },
+    { q: "Chi identificò per primo i principali gruppi sanguigni del sistema AB0?", options: ["Karl Landsteiner", "Alexander Fleming", "Robert Koch", "Paul Ehrlich"], answer: 0 },
+    { q: "Quale compositore scrisse 'Il flauto magico'?", options: ["Giuseppe Verdi", "Richard Wagner", "Wolfgang Amadeus Mozart", "Gioachino Rossini"], answer: 2 },
+    { q: "Quale trattato del 1992 istituì formalmente l'Unione Europea?", options: ["Trattato di Roma", "Trattato di Maastricht", "Trattato di Parigi", "Trattato di Nizza"], answer: 1 },
+    { q: "In quale anno si disputò la prima edizione del Tour de France?", options: ["1896", "1903", "1912", "1920"], answer: 1 },
+    { q: "Chi rese celebre il termine 'cyberspace' nel romanzo 'Neuromante'?", options: ["Isaac Asimov", "Arthur C. Clarke", "Philip K. Dick", "William Gibson"], answer: 3 },
+    { q: "In quale anno fu firmato il Trattato di Versailles?", options: ["1917", "1919", "1921", "1923"], answer: 1 },
+    { q: "In quale mare sfocia il Danubio?", options: ["Mar Baltico", "Mar Mediterraneo", "Mar Nero", "Mar del Nord"], answer: 2 },
+    { q: "Quale attore interpreta Rick Blaine nel film 'Casablanca'?", options: ["Cary Grant", "Humphrey Bogart", "James Stewart", "Gregory Peck"], answer: 1 },
+    { q: "Chi scrisse 'Ulisse'?", options: ["James Joyce", "Samuel Beckett", "T. S. Eliot", "Virginia Woolf"], answer: 0 },
+    { q: "Chi dipinse il 'Ritratto dei coniugi Arnolfini'?", options: ["Hans Holbein il Giovane", "Jan van Eyck", "Albrecht Dürer", "Rogier van der Weyden"], answer: 1 },
+    { q: "A chi viene attribuita la prima vaccinazione efficace contro il vaiolo?", options: ["Edward Jenner", "Louis Pasteur", "Robert Koch", "Joseph Lister"], answer: 0 },
+    { q: "Quale musicista pubblicò l'album jazz 'Kind of Blue'?", options: ["John Coltrane", "Miles Davis", "Thelonious Monk", "Duke Ellington"], answer: 1 },
+    { q: "Quale scandalo politico portò alle dimissioni del presidente Richard Nixon?", options: ["Iran-Contra", "Watergate", "Pentagon Papers", "Teapot Dome"], answer: 1 },
+    { q: "In quale anno si disputò il primo torneo di Wimbledon?", options: ["1868", "1877", "1888", "1896"], answer: 1 },
+    { q: "Chi è il principale autore del kernel Linux?", options: ["Dennis Ritchie", "Ken Thompson", "Linus Torvalds", "Richard Stallman"], answer: 2 },
+    { q: "Quale evento del 1868 segnò l'inizio della trasformazione politica del Giappone?", options: ["Rivoluzione Taiping", "Restaurazione Meiji", "Rivoluzione culturale", "Restaurazione Tokugawa"], answer: 1 },
+    { q: "Quale Stato possiede coste sia sul Mar Caspio sia sul Golfo Persico?", options: ["Iraq", "Iran", "Pakistan", "Azerbaigian"], answer: 1 },
+    { q: "Chi diresse il film 'La dolce vita'?", options: ["Michelangelo Antonioni", "Federico Fellini", "Pier Paolo Pasolini", "Vittorio De Sica"], answer: 1 },
+    { q: "Chi scrisse 'Il processo'?", options: ["Franz Kafka", "Thomas Mann", "Hermann Hesse", "Stefan Zweig"], answer: 0 },
+    { q: "Chi dipinse 'Il bacio' del 1907-1908?", options: ["Gustav Klimt", "Egon Schiele", "Edvard Munch", "Amedeo Modigliani"], answer: 0 },
+    { q: "A quale scienziato è attribuita la scoperta della radioattività naturale nel 1896?", options: ["Henri Becquerel", "Ernest Rutherford", "J. J. Thomson", "Max Planck"], answer: 0 },
+    { q: "Quale gruppo pubblicò 'Bohemian Rhapsody' nel 1975?", options: ["The Who", "Pink Floyd", "Queen", "Led Zeppelin"], answer: 2 },
+    { q: "Che cosa stabilisce in sostanza l'articolo 5 del Trattato NATO?", options: ["La libera circolazione dei cittadini", "La difesa collettiva in caso di attacco armato", "L'adozione di una moneta unica", "Il diritto di veto all'ONU"], answer: 1 },
+    { q: "Qual è la distanza ufficiale della maratona moderna?", options: ["40,000 km", "41,195 km", "42,195 km", "43,000 km"], answer: 2 },
+    { q: "Chi fu il principale fondatore di Wikipedia insieme a Jimmy Wales?", options: ["Larry Sanger", "Steve Wozniak", "Steve Jobs", "Sergey Brin"], answer: 0 },
+    { q: "Quale battaglia del 1066 segnò la conquista normanna dell'Inghilterra?", options: ["Agincourt", "Hastings", "Crécy", "Poitiers"], answer: 1 },
+    { q: "Quale Paese africano non ha sbocco sul mare?", options: ["Namibia", "Mozambico", "Botswana", "Sudafrica"], answer: 2 },
+    { q: "Quale riconoscimento vinse 'Pulp Fiction' al Festival di Cannes nel 1994?", options: ["Leone d'Oro", "Palma d'Oro", "Orso d'Oro", "Gran Premio della Giuria"], answer: 1 },
+    { q: "Chi scrisse 'Se questo è un uomo'?", options: ["Italo Calvino", "Primo Levi", "Elio Vittorini", "Cesare Pavese"], answer: 1 },
+    { q: "Quale artista presentò nel 1917 l'opera 'Fountain'?", options: ["Pablo Picasso", "Marcel Duchamp", "Man Ray", "Kazimir Malevič"], answer: 1 },
+    { q: "Chi dimostrò sperimentalmente l'esistenza dell'elettrone?", options: ["Ernest Rutherford", "J. J. Thomson", "James Clerk Maxwell", "Michael Faraday"], answer: 1 },
+    { q: "Chi compose il 'Boléro'?", options: ["Claude Debussy", "Maurice Ravel", "Camille Saint-Saëns", "Gabriel Fauré"], answer: 1 },
+    { q: "In quale anno si tennero le prime elezioni dirette del Parlamento europeo?", options: ["1973", "1979", "1984", "1989"], answer: 1 },
+    { q: "Chi vinse i 100 metri maschili alle Olimpiadi di Città del Messico del 1968 in 9,95 secondi?", options: ["Jesse Owens", "Carl Lewis", "Jim Hines", "Tommie Smith"], answer: 2 },
+    { q: "Chi coniò il termine 'intelligenza artificiale' nel contesto della conferenza di Dartmouth del 1956?", options: ["Alan Turing", "John McCarthy", "Claude Shannon", "Marvin Minsky"], answer: 1 },
+    { q: "Quali imperatori romani promulgarono nel 313 l'Editto di Milano?", options: ["Costantino e Licinio", "Augusto e Tiberio", "Nerone e Galba", "Diocleziano e Massimiano"], answer: 0 },
+    { q: "Quali sono tradizionalmente considerati i due estremi principali della Ferrovia Transiberiana?", options: ["Mosca e Vladivostok", "San Pietroburgo e Murmansk", "Mosca e Novosibirsk", "Kiev e Vladivostok"], answer: 0 },
+    { q: "Chi diresse il film horror 'Psycho'?", options: ["Stanley Kubrick", "Alfred Hitchcock", "Roman Polanski", "Brian De Palma"], answer: 1 },
+    { q: "Chi scrisse 'Alla ricerca del tempo perduto'?", options: ["Marcel Proust", "André Gide", "Émile Zola", "Gustave Flaubert"], answer: 0 },
+    { q: "Chi dipinse 'La persistenza della memoria'?", options: ["Joan Miró", "Salvador Dalí", "René Magritte", "Pablo Picasso"], answer: 1 },
+    { q: "Quali due naturalisti svilupparono indipendentemente idee fondamentali sulla selezione naturale?", options: ["Darwin e Wallace", "Darwin e Mendel", "Lamarck e Wallace", "Mendel e Lyell"], answer: 0 },
+    { q: "Quale compositore è autore della celebre 'Sonata al chiaro di luna'?", options: ["Franz Schubert", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven", "Frédéric Chopin"], answer: 2 },
+    { q: "In quale località del Lussemburgo fu firmato nel 1985 l'accordo da cui prende il nome l'area Schengen?", options: ["Esch-sur-Alzette", "Schengen", "Luxembourg City", "Vianden"], answer: 1 },
+    { q: "Quale nazionale vinse la prima Coppa del Mondo di rugby nel 1987?", options: ["Australia", "Nuova Zelanda", "Sudafrica", "Inghilterra"], answer: 1 },
+    { q: "Quale azienda acquisì YouTube nel 2006?", options: ["Microsoft", "Apple", "Google", "Yahoo!"], answer: 2 },
+    { q: "Quale evento del 1453 è tradizionalmente considerato la fine dell'Impero Romano d'Oriente?", options: ["La caduta di Antiochia", "La caduta di Costantinopoli", "La conquista di Gerusalemme", "La battaglia di Lepanto"], answer: 1 },
+    { q: "Quale Paese africano possiede coste sia sull'Oceano Atlantico sia sull'Oceano Indiano?", options: ["Kenya", "Sudafrica", "Angola", "Tanzania"], answer: 1 },
+    { q: "Chi diresse il film '8½'?", options: ["Federico Fellini", "Michelangelo Antonioni", "Luchino Visconti", "Bernardo Bertolucci"], answer: 0 },
+    { q: "Chi scrisse 'Il Gattopardo'?", options: ["Leonardo Sciascia", "Giuseppe Tomasi di Lampedusa", "Alberto Moravia", "Gabriele D'Annunzio"], answer: 1 },
+    { q: "Chi dipinse 'La nascita di Venere'?", options: ["Sandro Botticelli", "Tiziano", "Raffaello", "Piero della Francesca"], answer: 0 },
+    { q: "In quale strato dell'atmosfera si trova la maggior parte dell'ozono atmosferico?", options: ["Troposfera", "Stratosfera", "Mesosfera", "Termosfera"], answer: 1 },
+    { q: "Chi rese celebre l'espressione 'Cortina di ferro' nel discorso di Fulton del 1946?", options: ["Franklin D. Roosevelt", "Harry Truman", "Winston Churchill", "George Marshall"], answer: 2 },
+    { q: "Quale atleta vinse i 100 metri alle Olimpiadi di Città del Messico del 1968?", options: ["Tommie Smith", "Jim Hines", "Jesse Owens", "Bob Hayes"], answer: 1 },
+    { q: "Quale compositore russo scrisse il balletto 'Il lago dei cigni'?", options: ["Nikolaj Rimskij-Korsakov", "Pëtr Il'ič Čajkovskij", "Sergej Rachmaninov", "Igor Stravinskij"], answer: 1 },
+    { q: "Quale società sviluppò originariamente Android prima dell'acquisizione da parte di Google?", options: ["Android Inc.", "Palm Computing", "BlackBerry", "Nokia"], answer: 0 }
 ];
 
 
 /* ============================================================
    CARICAMENTO DELLE DOMANDE ORIGINALI
-   ============================================================
-
-   Il file originale del tuo progetto viene letto direttamente
-   dal repository principale.
-
-   In questo modo le tue domande originali rimangono intatte.
    ============================================================ */
 
-const ORIGINAL_QUESTION_URL =
-    "https://raw.githubusercontent.com/GiulioVar1988/quiz-cultura-generale/main/index.html";
-
+const ORIGINAL_QUESTION_URL = "https://raw.githubusercontent.com/GiulioVar1988/quiz-cultura-generale/main/index.html";
 
 let questionBank = [];
+let shuffledBank = []; // Qui conserveremo l'array misto globale
 
 let selectedQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let userAnswers = [];
 
-/*
-   Contiene il testo delle domande già utilizzate.
-   Finché non vengono utilizzate tutte, non possono essere
-   estratte nuovamente.
-*/
-let usedQuestions = new Set();
-
+// Usiamo un indice globale invece di un Set per scorrere l'array misto
+let globalQuestionIndex = 0; 
 
 /* ============================================================
    ESTRAZIONE DEL QUESTION BANK DAL VECCHIO INDEX
    ============================================================ */
 
 async function loadOriginalQuestions() {
-
     try {
-
         const response = await fetch(ORIGINAL_QUESTION_URL);
 
         if (!response.ok) {
@@ -749,202 +391,124 @@ async function loadOriginalQuestions() {
 
         const html = await response.text();
 
-        /*
-           Cerca la parte:
-
-           const questionBank = [
-               ...
-           ];
-
-           e la converte in un array JavaScript.
-        */
-
-        const match = html.match(
-            /const\s+questionBank\s*=\s*(\[[\s\S]*?\]);/
-        );
+        const match = html.match(/const\s+questionBank\s*=\s*(\[[\s\S]*?\]);/);
 
         if (!match) {
             throw new Error("Question bank originale non trovato.");
         }
 
-        /*
-           Il question bank originale contiene solamente oggetti
-           di questo tipo:
-
-           { q: "...", options: [...], answer: 1 }
-
-           Per sicurezza utilizziamo Function soltanto sul blocco
-           già proveniente dal nostro repository.
-        */
-
-        const originalQuestions = Function(
-            `"use strict"; return (${match[1]});`
-        )();
+        const originalQuestions = Function(`"use strict"; return (${match[1]});`)();
 
         if (!Array.isArray(originalQuestions)) {
             throw new Error("Il question bank originale non è valido.");
         }
 
-        /*
-           Uniamo le domande originali con quelle nuove.
-        */
-        questionBank = [
-            ...originalQuestions,
-            ...difficultQuestions
-        ];
+        // Uniamo le domande originali con quelle nuove
+        questionBank = [...originalQuestions, ...difficultQuestions];
 
-        /*
-           Rimuove eventuali duplicati in base al testo della domanda.
-        */
+        // Rimuove eventuali duplicati
         const uniqueQuestions = [];
         const seen = new Set();
 
         questionBank.forEach(question => {
-
-            if (
-                question &&
-                typeof question.q === "string" &&
-                Array.isArray(question.options) &&
-                question.options.length === 4 &&
-                Number.isInteger(question.answer) &&
-                question.answer >= 0 &&
-                question.answer <= 3
-            ) {
-
+            if (question && typeof question.q === "string" && Array.isArray(question.options) && question.options.length === 4 && Number.isInteger(question.answer) && question.answer >= 0 && question.answer <= 3) {
                 if (!seen.has(question.q)) {
                     seen.add(question.q);
                     uniqueQuestions.push(question);
                 }
-
             }
-
         });
 
         questionBank = uniqueQuestions;
 
-        console.log(
-            "Domande originali:",
-            originalQuestions.length
-        );
+        // Carica lo stato dal salvataggio
+        loadQuizState();
 
-        console.log(
-            "Domande nuove:",
-            difficultQuestions.length
-        );
-
-        console.log(
-            "Domande totali:",
-            questionBank.length
-        );
-
-        /*
-           Se il browser ha già una banca memorizzata,
-           la carichiamo per continuare il ciclo.
-        */
-        loadUsedQuestions();
-
-        /*
-           Aggiorna il numero visualizzato.
-        */
         updateBankInfo();
 
     } catch (error) {
-
         console.error(error);
-
-        /*
-           Se per qualche motivo il repository originale non
-           fosse raggiungibile, utilizziamo comunque le nuove
-           domande per evitare una pagina completamente vuota.
-        */
         questionBank = [...difficultQuestions];
-
+        
+        loadQuizState(); // Prova comunque a caricare lo stato per le difficultQuestions
+        
         updateBankInfo();
-
-        document.getElementById("start-screen").innerHTML = `
-            <h1>Quiz di Cultura Generale</h1>
-
-            <p style="text-align:center;color:#666;">
-                Il caricamento della banca dati originale ha avuto
-                un problema temporaneo.
-            </p>
-
-            <button class="btn" onclick="location.reload()">
-                Riprova
-            </button>
-        `;
+        
+        // Se c'è un errore, lo mostriamo ma permettiamo di giocare con le domande "difficult"
+        document.querySelector(".bank-info").innerHTML += "<br><span style='color:red;'>Avviso: Caricate solo le domande bonus.</span>";
     }
 }
-
 
 /* ============================================================
-   MEMORIA ANTI-RIPETIZIONE
+   MEMORIA ANTI-RIPETIZIONE (NUOVA LOGICA)
    ============================================================ */
 
-function loadUsedQuestions() {
-
+function loadQuizState() {
     try {
+        const savedIndex = localStorage.getItem("quizGlobalIndex");
+        const savedBank = localStorage.getItem("quizShuffledBank");
 
-        const saved = localStorage.getItem(
-            "quizCulturaGeneraleUsedQuestions"
-        );
-
-        if (!saved) {
-            usedQuestions = new Set();
-            return;
+        if (savedBank && savedIndex) {
+            // Se esiste un salvataggio, ripristiniamo l'array misto e a che punto eravamo
+            shuffledBank = JSON.parse(savedBank);
+            globalQuestionIndex = parseInt(savedIndex, 10);
+            
+            // Controllo di sicurezza: se per qualche motivo il db è cambiato e l'indice è sballato
+            if (globalQuestionIndex >= shuffledBank.length) {
+                resetQuizMemory();
+            }
+        } else {
+            // Primo avvio in assoluto: mischiamo tutto il mazzo
+            shuffledBank = shuffleArray([...questionBank]);
+            globalQuestionIndex = 0;
+            saveQuizState();
         }
-
-        const parsed = JSON.parse(saved);
-
-        if (Array.isArray(parsed)) {
-            usedQuestions = new Set(parsed);
-        }
-
     } catch (error) {
-
-        console.warn(
-            "Impossibile leggere le domande utilizzate.",
-            error
-        );
-
-        usedQuestions = new Set();
+        console.warn("Impossibile leggere lo stato del quiz.", error);
+        shuffledBank = shuffleArray([...questionBank]);
+        globalQuestionIndex = 0;
     }
 }
 
-
-function saveUsedQuestions() {
-
+function saveQuizState() {
     try {
-
-        localStorage.setItem(
-            "quizCulturaGeneraleUsedQuestions",
-            JSON.stringify([...usedQuestions])
-        );
-
+        localStorage.setItem("quizShuffledBank", JSON.stringify(shuffledBank));
+        localStorage.setItem("quizGlobalIndex", globalQuestionIndex.toString());
     } catch (error) {
-
-        console.warn(
-            "Impossibile salvare le domande utilizzate.",
-            error
-        );
+        console.warn("Impossibile salvare lo stato del quiz.", error);
     }
 }
 
+function resetQuizMemory() {
+    localStorage.removeItem("quizShuffledBank");
+    localStorage.removeItem("quizGlobalIndex");
+    
+    // Rimescola da capo
+    shuffledBank = shuffleArray([...questionBank]);
+    globalQuestionIndex = 0;
+    saveQuizState();
+    
+    updateBankInfo();
+    alert("Memoria azzerata! Ripartirai dalla prima domanda di un nuovo mazzo mischiato.");
+}
 
 /* ============================================================
    AGGIORNAMENTO NUMERO DOMANDE
    ============================================================ */
 
 function updateBankInfo() {
-
     const info = document.querySelector(".bank-info");
+    const statsInfo = document.getElementById("stats-info");
 
     if (!info || !questionBank.length) {
         return;
     }
 
-    info.innerText =
-        `${questionBank.length} domande disponibili • 10 domande per partita`;
+    info.innerText = `${questionBank.length} domande disponibili • 10 domande per partita`;
+    
+    if (shuffledBank.length > 0) {
+        statsInfo.innerText = `Hai visto ${globalQuestionIndex} domande su ${shuffledBank.length}`;
+    }
 }
 
 
@@ -953,71 +517,47 @@ function updateBankInfo() {
    ============================================================ */
 
 function shuffleArray(array) {
-
     const result = [...array];
-
     for (let i = result.length - 1; i > 0; i--) {
-
-        const j = Math.floor(
-            Math.random() * (i + 1)
-        );
-
-        [result[i], result[j]] =
-            [result[j], result[i]];
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
     }
-
     return result;
 }
 
 
 /* ============================================================
-   SELEZIONE DI 10 DOMANDE SENZA RIPETIZIONI
+   SELEZIONE DI 10 DOMANDE SENZA RIPETIZIONI (NUOVA LOGICA)
    ============================================================ */
 
-function getRandomQuestions(array, n) {
+function getNextQuestions(n) {
+    if (!shuffledBank.length) return [];
 
-    if (!array.length) {
-        return [];
+    let selected = [];
+
+    // Se l'indice sta per superare il totale delle domande, ricominciamo il giro
+    if (globalQuestionIndex + n > shuffledBank.length) {
+        // Prendi quelle rimanenti in fondo alla lista
+        const remaining = shuffledBank.slice(globalQuestionIndex);
+        selected = [...remaining];
+        
+        // Rimescola per il nuovo giro
+        shuffledBank = shuffleArray([...questionBank]);
+        globalQuestionIndex = 0;
+        
+        // Prendi quelle che mancano per arrivare a 10 dal nuovo mazzo
+        const needed = n - remaining.length;
+        selected = [...selected, ...shuffledBank.slice(0, needed)];
+        globalQuestionIndex = needed;
+        
+        alert("Hai completato tutte le domande del database! Il mazzo è stato rimescolato per un nuovo giro.");
+    } else {
+        // Estrazione standard e sequenziale dal mazzo mischiato
+        selected = shuffledBank.slice(globalQuestionIndex, globalQuestionIndex + n);
+        globalQuestionIndex += n;
     }
 
-    /*
-       Domande ancora non utilizzate.
-    */
-    let availableQuestions = array.filter(
-        question => !usedQuestions.has(question.q)
-    );
-
-    /*
-       Se non ci sono abbastanza domande per completare
-       una partita da 10, terminiamo il vecchio ciclo
-       e iniziamo un nuovo ciclo.
-    */
-    if (availableQuestions.length < n) {
-
-        usedQuestions.clear();
-        saveUsedQuestions();
-
-        availableQuestions = [...array];
-    }
-
-    /*
-       Mischiamo veramente tutta la banca disponibile.
-    */
-    const shuffled = shuffleArray(
-        availableQuestions
-    );
-
-    const selected = shuffled.slice(0, n);
-
-    /*
-       Memorizziamo immediatamente le domande utilizzate.
-    */
-    selected.forEach(question => {
-        usedQuestions.add(question.q);
-    });
-
-    saveUsedQuestions();
-
+    saveQuizState();
     return selected;
 }
 
@@ -1027,27 +567,15 @@ function getRandomQuestions(array, n) {
    ============================================================ */
 
 function startQuiz() {
-
     if (!questionBank.length) {
-
-        alert(
-            "La banca dati non è ancora pronta. Riprova tra un momento."
-        );
-
+        alert("La banca dati non è ancora pronta. Riprova tra un momento.");
         return;
     }
 
-    selectedQuestions = getRandomQuestions(
-        questionBank,
-        TOTAL_QUESTIONS
-    );
+    selectedQuestions = getNextQuestions(TOTAL_QUESTIONS);
 
     if (selectedQuestions.length < TOTAL_QUESTIONS) {
-
-        alert(
-            "Non sono disponibili abbastanza domande."
-        );
-
+        alert("Si è verificato un errore nel caricamento delle domande.");
         return;
     }
 
@@ -1056,7 +584,6 @@ function startQuiz() {
     userAnswers = [];
 
     showScreen("quiz-screen");
-
     showQuestion();
 }
 
@@ -1066,19 +593,18 @@ function startQuiz() {
    ============================================================ */
 
 function showScreen(screenId) {
-
-    document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-            screen.classList.remove("active");
-        });
-
-    const screen =
-        document.getElementById(screenId);
-
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+    const screen = document.getElementById(screenId);
     if (screen) {
         screen.classList.add("active");
     }
+}
+
+function goToStart() {
+    updateBankInfo();
+    showScreen("start-screen");
 }
 
 
@@ -1087,56 +613,26 @@ function showScreen(screenId) {
    ============================================================ */
 
 function showQuestion() {
+    const qData = selectedQuestions[currentQuestionIndex];
+    if (!qData) return;
 
-    const qData =
-        selectedQuestions[currentQuestionIndex];
+    document.getElementById("progress").innerText = `Domanda ${currentQuestionIndex + 1} di ${TOTAL_QUESTIONS}`;
+    document.getElementById("question-text").innerText = qData.q;
 
-    if (!qData) {
-        return;
-    }
-
-    document.getElementById("progress").innerText =
-        `Domanda ${currentQuestionIndex + 1} di ${TOTAL_QUESTIONS}`;
-
-    document.getElementById("question-text").innerText =
-        qData.q;
-
-    const feedback =
-        document.getElementById("feedback");
-
+    const feedback = document.getElementById("feedback");
     feedback.innerText = "";
     feedback.style.color = "";
 
-    document.getElementById("next-btn").style.display =
-        "none";
+    document.getElementById("next-btn").style.display = "none";
 
-    const optionsContainer =
-        document.getElementById("options-container");
-
+    const optionsContainer = document.getElementById("options-container");
     optionsContainer.innerHTML = "";
 
-    /*
-       Mescoliamo anche le quattro risposte?
-
-       NO.
-
-       Manteniamo le risposte nella loro posizione perché
-       il campo answer del database indica l'indice corretto.
-    */
-
     qData.options.forEach((optionText, index) => {
-
-        const button =
-            document.createElement("button");
-
+        const button = document.createElement("button");
         button.className = "option-btn";
-
-        button.innerText =
-            optionText;
-
-        button.onclick =
-            () => selectOption(index);
-
+        button.innerText = optionText;
+        button.onclick = () => selectOption(index);
         optionsContainer.appendChild(button);
     });
 }
@@ -1147,87 +643,35 @@ function showQuestion() {
    ============================================================ */
 
 function selectOption(selectedIndex) {
+    const qData = selectedQuestions[currentQuestionIndex];
+    const buttons = document.querySelectorAll(".option-btn");
 
-    const qData =
-        selectedQuestions[currentQuestionIndex];
+    buttons.forEach(button => { button.disabled = true; });
 
-    const buttons =
-        document.querySelectorAll(".option-btn");
+    const isCorrect = selectedIndex === qData.answer;
 
-    /*
-       Evita che l'utente possa rispondere due volte.
-    */
-    buttons.forEach(button => {
-        button.disabled = true;
-    });
-
-    const isCorrect =
-        selectedIndex === qData.answer;
-
-    /*
-       Salva la risposta per il riepilogo finale.
-    */
     userAnswers.push({
-
         question: qData.q,
-
-        selected:
-            qData.options[selectedIndex],
-
-        correct:
-            qData.options[qData.answer],
-
-        isCorrect:
-            isCorrect
-
+        selected: qData.options[selectedIndex],
+        correct: qData.options[qData.answer],
+        isCorrect: isCorrect
     });
 
-    /*
-       RISPOSTA CORRETTA
-    */
     if (isCorrect) {
-
         score++;
-
-        buttons[selectedIndex]
-            .classList.add("correct");
-
-        const feedback =
-            document.getElementById("feedback");
-
-        feedback.innerText =
-            "Corretto! 🎉";
-
-        feedback.style.color =
-            "var(--correct-color)";
+        buttons[selectedIndex].classList.add("correct");
+        const feedback = document.getElementById("feedback");
+        feedback.innerText = "Corretto! 🎉";
+        feedback.style.color = "var(--correct-color)";
+    } else {
+        buttons[selectedIndex].classList.add("wrong");
+        buttons[qData.answer].classList.add("correct");
+        const feedback = document.getElementById("feedback");
+        feedback.innerText = "Sbagliato! ❌";
+        feedback.style.color = "var(--wrong-color)";
     }
 
-    /*
-       RISPOSTA SBAGLIATA
-    */
-    else {
-
-        buttons[selectedIndex]
-            .classList.add("wrong");
-
-        buttons[qData.answer]
-            .classList.add("correct");
-
-        const feedback =
-            document.getElementById("feedback");
-
-        feedback.innerText =
-            "Sbagliato! ❌";
-
-        feedback.style.color =
-            "var(--wrong-color)";
-    }
-
-    /*
-       Mostra il pulsante per andare avanti.
-    */
-    document.getElementById("next-btn")
-        .style.display = "block";
+    document.getElementById("next-btn").style.display = "block";
 }
 
 
@@ -1236,18 +680,10 @@ function selectOption(selectedIndex) {
    ============================================================ */
 
 function nextQuestion() {
-
     currentQuestionIndex++;
-
-    if (
-        currentQuestionIndex <
-        TOTAL_QUESTIONS
-    ) {
-
+    if (currentQuestionIndex < TOTAL_QUESTIONS) {
         showQuestion();
-
     } else {
-
         showResults();
     }
 }
@@ -1258,140 +694,53 @@ function nextQuestion() {
    ============================================================ */
 
 function showResults() {
-
     showScreen("result-screen");
 
-    document.getElementById(
-        "score-display"
-    ).innerText =
-        `Il tuo punteggio: ${score} / ${TOTAL_QUESTIONS}`;
+    document.getElementById("score-display").innerText = `Il tuo punteggio: ${score} / ${TOTAL_QUESTIONS}`;
 
-
-    const evalBox =
-        document.getElementById(
-            "evaluation-display"
-        );
-
+    const evalBox = document.getElementById("evaluation-display");
 
     if (score <= 2) {
-
-        evalBox.innerText =
-            "Giudizio: Da migliorare! 😅 Continua ad allenarti con la cultura generale.";
-
-        evalBox.style.color =
-            "#dc3545";
-
-        evalBox.style.backgroundColor =
-            "#f8d7da";
+        evalBox.innerText = "Giudizio: Da migliorare! 😅 Continua ad allenarti con la cultura generale.";
+        evalBox.style.color = "#dc3545";
+        evalBox.style.backgroundColor = "#f8d7da";
+    } else if (score <= 4) {
+        evalBox.innerText = "Giudizio: Insufficiente! 📚 Serve un bel ripasso.";
+        evalBox.style.color = "#dc3545";
+        evalBox.style.backgroundColor = "#f8d7da";
+    } else if (score <= 6) {
+        evalBox.innerText = "Giudizio: Sufficiente / Mediocre! 🙂 Te la cavi, ma puoi fare di meglio.";
+        evalBox.style.color = "#856404";
+        evalBox.style.backgroundColor = "#fff3cd";
+    } else if (score <= 8) {
+        evalBox.innerText = "Giudizio: Bravo! 👏 Ottima conoscenza di cultura generale!";
+        evalBox.style.color = "#004085";
+        evalBox.style.backgroundColor = "#cce5ff";
+    } else {
+        evalBox.innerText = "Giudizio: Complimenti! 🏆 Un vero esperto di cultura generale!";
+        evalBox.style.color = "#155724";
+        evalBox.style.backgroundColor = "#d4edda";
     }
 
-    else if (score <= 4) {
+    const reviewContainer = document.getElementById("review-container");
+    reviewContainer.innerHTML = "<h3>Riepilogo Risposte:</h3>";
 
-        evalBox.innerText =
-            "Giudizio: Insufficiente! 📚 Serve un bel ripasso.";
+    userAnswers.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = `review-item ${item.isCorrect ? "correct-item" : "wrong-item"}`;
 
-        evalBox.style.color =
-            "#dc3545";
+        let content = `<strong>${index + 1}. ${escapeHtml(item.question)}</strong><br>`;
 
-        evalBox.style.backgroundColor =
-            "#f8d7da";
-    }
-
-    else if (score <= 6) {
-
-        evalBox.innerText =
-            "Giudizio: Sufficiente / Mediocre! 🙂 Te la cavi, ma puoi fare di meglio.";
-
-        evalBox.style.color =
-            "#856404";
-
-        evalBox.style.backgroundColor =
-            "#fff3cd";
-    }
-
-    else if (score <= 8) {
-
-        evalBox.innerText =
-            "Giudizio: Bravo! 👏 Ottima conoscenza di cultura generale!";
-
-        evalBox.style.color =
-            "#004085";
-
-        evalBox.style.backgroundColor =
-            "#cce5ff";
-    }
-
-    else {
-
-        evalBox.innerText =
-            "Giudizio: Complimenti! 🏆 Un vero esperto di cultura generale!";
-
-        evalBox.style.color =
-            "#155724";
-
-        evalBox.style.backgroundColor =
-            "#d4edda";
-    }
-
-
-    /*
-       RIEPILOGO DELLE 10 DOMANDE
-    */
-
-    const reviewContainer =
-        document.getElementById(
-            "review-container"
-        );
-
-    reviewContainer.innerHTML =
-        "<h3>Riepilogo Risposte:</h3>";
-
-
-    userAnswers.forEach(
-        (item, index) => {
-
-            const div =
-                document.createElement("div");
-
-            div.className =
-                `review-item ${
-                    item.isCorrect
-                        ? "correct-item"
-                        : "wrong-item"
-                }`;
-
-
-            let content =
-                `<strong>${index + 1}. ${escapeHtml(item.question)}</strong><br>`;
-
-
-            if (item.isCorrect) {
-
-                content +=
-                    `<span style="color: var(--correct-color)">
-                        Risposta: ${escapeHtml(item.selected)} ✔
-                    </span>`;
-
-            } else {
-
-                content +=
-                    `<span style="color: var(--wrong-color)">
-                        Tua risposta: ${escapeHtml(item.selected)} ✖
-                    </span><br>`;
-
-                content +=
-                    `<span style="color: var(--correct-color)">
-                        Risposta corretta: ${escapeHtml(item.correct)}
-                    </span>`;
-            }
-
-
-            div.innerHTML =
-                content;
-
-            reviewContainer.appendChild(div);
+        if (item.isCorrect) {
+            content += `<span style="color: var(--correct-color)">Risposta: ${escapeHtml(item.selected)} ✔</span>`;
+        } else {
+            content += `<span style="color: var(--wrong-color)">Tua risposta: ${escapeHtml(item.selected)} ✖</span><br>`;
+            content += `<span style="color: var(--correct-color)">Risposta corretta: ${escapeHtml(item.correct)}</span>`;
         }
-    );
+
+        div.innerHTML = content;
+        reviewContainer.appendChild(div);
+    });
 }
 
 
@@ -1400,16 +749,10 @@ function showResults() {
    ============================================================ */
 
 function escapeHtml(value) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        value;
-
+    const div = document.createElement("div");
+    div.textContent = value;
     return div.innerHTML;
 }
-
 
 /* ============================================================
    AVVIO CARICAMENTO BANCA DATI
